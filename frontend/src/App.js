@@ -35,6 +35,40 @@ task
         return currentStatus;
     }
   };
+
+  const handleTaskClick = async (taskId) => {
+    try {
+        const payload = { name: newTaskName };
+
+        // Log the payload before sending the request
+        console.log('Request Payload:', payload);
+
+        const response = await fetch("http://localhost:5000/tasks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+            // Log the response data
+            const data = await response.json();
+            console.log('Response from backend:', data);
+
+            // Task added successfully
+            console.log('Task added successfully');
+        } else {
+            // Log detailed error information
+            const errorData = await response.json();
+            console.error('Failed to add task:', response.statusText);
+            console.error('Error Details:', errorData);
+        }
+    } catch (error) {
+        // Log generic error information
+        console.error('Error adding task:', error);
+    }
+};
   
   
   const handleAddTask = async (newTaskName) => {

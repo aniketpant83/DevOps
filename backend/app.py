@@ -45,6 +45,18 @@ def create_task():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/tasks/<int:task_id>', methods=['PUT'])
+def update_task_status(task_id):
+    data = request.get_json()
+    new_status = data.get('status')
+
+    task = Task.query.get(task_id)
+    task.status = new_status
+    db.session.commit()
+
+    return jsonify({'message': 'Task updated successfully', 'task': task.serialize()})
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
