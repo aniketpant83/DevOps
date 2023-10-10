@@ -25,11 +25,25 @@ task.status} for task in tasks]
 
 @app.route('/tasks', methods=['POST'])
 def create_task():
-    data = request.get_json()
-    new_task = Task(name=data['name'])
-    db.session.add(new_task)
-    db.session.commit()
-    return jsonify({'message': 'Task created successfully'}), 201
+    try:
+        data = request.get_json()
+
+        headers = dict(request.headers)
+        print('Request Headers:', headers)
+
+        # Check if 'name' is present in the JSON data
+        if 'name' not in data:
+            raise ValueError("Task name is missing in the request.")
+
+        new_task = Task(name=data['name'])
+        db.session.add(new_task)
+        db.session.commit()
+
+        return jsonify({'message': 'Task created successfully'}), 201
+    except ValueError as ve:
+        return jsonify({'error': str(ve)}), 400  # Bad Request
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     with app.app_context():

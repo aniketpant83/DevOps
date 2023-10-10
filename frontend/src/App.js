@@ -35,29 +35,42 @@ task
         return currentStatus;
     }
   };
-
-  const handleAddTask = async () => {
+  
+  
+  const handleAddTask = async (newTaskName) => {
     try {
-      const response = await fetch("http://localhost:5000/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: newTaskName }),
-      });
+        const payload = { name: newTaskName };
 
-      if (response.ok) {
-        // Task created successfully, update state or perform other 
-actions
-        setNewTaskName(""); // Clear input field
-        fetchTasks(); // Refetch tasks to update the list
-      } else {
-        console.error("Error creating task:", response.statusText);
-      }
+        // Log the payload before sending the request
+        console.log('Request Payload:', payload);
+
+        const response = await fetch("http://localhost:5000/tasks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+            // Log the response data
+            const data = await response.json();
+            console.log('Response from backend:', data);
+
+            // Task added successfully
+            console.log('Task added successfully');
+        } else {
+            // Log detailed error information
+            const errorData = await response.json();
+            console.error('Failed to add task:', response.statusText);
+            console.error('Error Details:', errorData);
+        }
     } catch (error) {
-      console.error("Error creating task:", error);
+        // Log generic error information
+        console.error('Error adding task:', error);
     }
-  };
+};
+
 
   const fetchTasks = async () => {
     try {
