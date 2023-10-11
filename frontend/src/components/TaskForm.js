@@ -5,9 +5,10 @@ const TaskForm = ({ onAddTask }) => {
   const [taskName, setTaskName] = useState("");
 
   const handleAddTask = () => {
+    console.log('Task Name:', taskName);
     if (taskName.trim()) {
       onAddTask(taskName);
-      setTaskName("");
+      setTaskName(""); // Clear the input after adding the task
     }
   };
 
