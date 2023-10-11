@@ -28,6 +28,10 @@ const App = () => {
 
   const handleTaskClick = async (taskId) => {
     try {
+      const taskToUpdate = tasks.find(task => task.id === taskId);
+      if (taskToUpdate.status === 'Done') {
+        await deleteTask(taskId);
+      }
       // Find the task with the clicked taskId
       const updatedTasks = tasks.map((task) =>
         task.id === taskId
@@ -58,6 +62,26 @@ const App = () => {
       console.error('Error updating task:', error);
     }
   };
+
+  const deleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/tasks/${taskId}`, {
+        method: 'DELETE',
+      });
+  
+      if (response.ok) {
+        const updatedTasks = tasks.filter(task => task.id !== taskId);
+        setTasks(updatedTasks);
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to delete task:', response.statusText);
+        console.error('Error Details:', errorData);
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+  
 
   const handleAddTask = async (newTaskName) => {
     try {

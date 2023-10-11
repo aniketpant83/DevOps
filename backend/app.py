@@ -60,9 +60,6 @@ def update_task_status(task_id):
         headers = dict(request.headers)
         print('Request Headers:', headers)
 
-        # Check if 'name' is present in the JSON data
-        #ame' not in data:
-        #    raise ValueError("Task name is missing in the request.")
         if 'status' not in data:
             raise ValueError("Task status is missing in the request.")
 
@@ -74,9 +71,20 @@ def update_task_status(task_id):
     except ValueError as ve:
         return jsonify({'error': str(ve)}), 400  # Bad Request
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error update': str(e)}), 500
     
-
+@app.route('/tasks/<int:task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    try:
+        task = Task.query.get(task_id)
+        if task:
+            db.session.delete(task)
+            db.session.commit()
+            return jsonify({'message': 'Task deleted successfully'}), 200
+        else:
+            return jsonify({'error': 'Task not found'}), 404
+    except Exception as e:
+        return jsonify({'error del': str(e)}), 500
 
 if __name__ == '__main__':
     with app.app_context():
