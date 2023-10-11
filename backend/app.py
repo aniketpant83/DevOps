@@ -12,6 +12,13 @@ class Task(db.Model):
     name = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(50), nullable=False, default='To Do')
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'status': self.status
+        }
+
 @app.route('/')
 def home():
     return jsonify({'message': 'Welcome to the Task Management API'})
@@ -47,14 +54,28 @@ def create_task():
 
 @app.route('/tasks/<int:task_id>', methods=['PUT'])
 def update_task_status(task_id):
-    data = request.get_json()
-    new_status = data.get('status')
+    try:
+        data = request.get_json()
+        new_status = data.get('status')
+        headers = dict(request.headers)
+        print('Request Headers:', headers)
 
-    task = Task.query.get(task_id)
-    task.status = new_status
-    db.session.commit()
+        # Check if 'name' is present in the JSON data
+        #ame' not in data:
+        #    raise ValueError("Task name is missing in the request.")
+        if 'status' not in data:
+            raise ValueError("Task status is missing in the request.")
 
-    return jsonify({'message': 'Task updated successfully', 'task': task.serialize()})
+        task = Task.query.get(task_id)
+        task.status = new_status
+        db.session.commit()
+
+        return jsonify({'message': 'Task updated successfully', 'task': task.serialize()}), 201
+    except ValueError as ve:
+        return jsonify({'error': str(ve)}), 400  # Bad Request
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
 
 
 if __name__ == '__main__':

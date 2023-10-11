@@ -12,16 +12,6 @@ const App = () => {
     fetchTasks();
   }, []); // Run once on component mount
 
-  const handleTaskClick = (taskId) => {
-    // Find the task with the clicked taskId
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, status: nextStatus(task.status) } : 
-task
-    );
-
-    setTasks(updatedTasks);
-  };
-
   const nextStatus = (currentStatus) => {
     // Define your logic for transitioning task status here
     switch (currentStatus) {
@@ -38,73 +28,62 @@ task
 
   const handleTaskClick = async (taskId) => {
     try {
-        const payload = { name: newTaskName };
+      // Find the task with the clicked taskId
+      const updatedTasks = tasks.map((task) =>
+        task.id === taskId
+          ? { ...task, status: nextStatus(task.status) }
+          : task
+      );
 
-        // Log the payload before sending the request
-        console.log('Request Payload:', payload);
+      setTasks(updatedTasks);
 
-        const response = await fetch("http://localhost:5000/tasks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-        });
+      const response = await fetch(`http://localhost:5000/tasks/${taskId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: nextStatus(tasks.find(task => task.id === taskId).status) }),
+      });
 
-        if (response.ok) {
-            // Log the response data
-            const data = await response.json();
-            console.log('Response from backend:', data);
-
-            // Task added successfully
-            console.log('Task added successfully');
-        } else {
-            // Log detailed error information
-            const errorData = await response.json();
-            console.error('Failed to add task:', response.statusText);
-            console.error('Error Details:', errorData);
-        }
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Response from backend:', data);
+        console.log('Task updated successfully');
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to update task:', response.statusText);
+        console.error('Error Details:', errorData);
+      }
     } catch (error) {
-        // Log generic error information
-        console.error('Error adding task:', error);
+      console.error('Error updating task:', error);
     }
-};
-  
-  
+  };
+
   const handleAddTask = async (newTaskName) => {
     try {
-        const payload = { name: newTaskName };
+      const payload = { name: newTaskName };
 
-        // Log the payload before sending the request
-        console.log('Request Payload:', payload);
+      const response = await fetch("http://localhost:5000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-        const response = await fetch("http://localhost:5000/tasks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (response.ok) {
-            // Log the response data
-            const data = await response.json();
-            console.log('Response from backend:', data);
-
-            // Task added successfully
-            console.log('Task added successfully');
-        } else {
-            // Log detailed error information
-            const errorData = await response.json();
-            console.error('Failed to add task:', response.statusText);
-            console.error('Error Details:', errorData);
-        }
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Response from backend:', data);
+        console.log('Task added successfully');
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to add task:', response.statusText);
+        console.error('Error Details:', errorData);
+      }
     } catch (error) {
-        // Log generic error information
-        console.error('Error adding task:', error);
+      console.error('Error adding task:', error);
     }
-};
-
+  };
 
   const fetchTasks = async () => {
     try {
@@ -134,4 +113,3 @@ task
 };
 
 export default App;
-
