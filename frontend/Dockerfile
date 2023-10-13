@@ -1,8 +1,9 @@
 # Use an official Node.js runtime as the base image
 FROM node:14
 
+RUN mkdir /usr/src/frontend
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /usr/src/frontend
 
 # Copy the package.json and package-lock.json files into the image
 COPY package*.json ./
@@ -17,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 # Define the default command to run when the container starts
-CMD [ "node", "App.js" ]
+CMD [ "npm", "start" ]
