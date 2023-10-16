@@ -21,7 +21,7 @@ const TaskForm = ({ onAddTask }) => {
         value={taskName}
         onChange={(e) => setTaskName(e.target.value)}
       />
-      <button onClick={handleAddTask}>Add Task</button>
+      <button onClick={handleAddTask}>Add</button>
     </div>
   );
 };
