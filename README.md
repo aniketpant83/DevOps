@@ -1,8 +1,7 @@
-# DevOps
+# Task Management Web Application
+___
 
-Task Management Web Application
-
-Attempting the below project, not in a strict order:
+## Attempting the below project, not in a strict order:
 
 -Write a web application in React/Vue/Angular. (Done)
 
@@ -30,14 +29,14 @@ Attempting the below project, not in a strict order:
 
 _________________________________________________________________________________________________________________________________
 
-Note: I am a beginner myself, but if you're even greener than me and not getting any of the terms, I URGE you to open chatGPT and understand these terms instead of glossing over it.
+***Note:*** I am a beginner myself, but if you're even greener than me and not getting any of the terms, I URGE you to open chatGPT and understand these terms instead of glossing over it.
 
-How the app works: Add tasks, refresh the page to see the added tasks (marked as Issue 1 under issues heading). You can click on the tasks to move them around. When a task reaches 'Done' state and is clicked again, it deletes it in the backend but on the frontend, it pushes it in a cylical process back to 'To Do'. Refresh the page to see the task as deleted (marked as Issue 2, linked to Issue 1 I think).
+**How the app works:** Add tasks, refresh the page to see the added tasks (marked as Issue 1 under issues heading). You can click on the tasks to move them around. When a task reaches 'Done' state and is clicked again, it deletes it in the backend but on the frontend, it pushes it in a cylical process back to 'To Do'. Refresh the page to see the task as deleted (marked as Issue 2, linked to Issue 1 I think).
 
-Running The App
+## Running The App
 There are two approaches you can take; locally or docker. I would suggest doing it using the Approach 2 (dockers) as the whole point of containers is to make it portable and prevent a dependency mismatch. 
 
-Approach 1: Steps to Run the Full-Stack App Locally
+***Approach 1:*** Steps to Run the Full-Stack App Locally
 
 -Backend: On one terminal, navigate to the folder named backend, and execute the command 'python3 app.py'
 -Frontend: On second terminal, navigate to the folder named frontend, and execute the command 'npm start'
@@ -45,7 +44,7 @@ Approach 1: Steps to Run the Full-Stack App Locally
 -Access backend on localhost:5000 or localhost:5000/tasks.
 -Use the app.
 
-Approach 2: Steps to Run the Full-Stack App on Containers:
+***Approach 2:*** Steps to Run the Full-Stack App on Containers:
 
 Download Docker: Go to https://hub.docker.com, and choose the one for your OS.
 
@@ -68,15 +67,16 @@ Now that the app is running on the containers,
 -Access frontend on localhost:3000. 
 -Access backend on localhost:5000 or localhost:5000/tasks.
 -Use the app.
+___
 
-Unit Test:
+***Unit Test:***
 Written unit tests for Flask but working on the rest.
 
-Issues: Can solve these with some effort but prioritizing finishing a skeletal structure for now.
+**Issues:** Can solve these with some effort but prioritizing finishing a skeletal structure for now.
 
 Issue 1: Having to refresh the web page to see the added tasks.
 Issue 2: Having to refresh the web page to see deleted tasks, or else it is going from 'Done' to 'To Do'. Mostly linked to the above issue.
 
-Immediate Work In Progress:
+**Immediate Work In Progress:**
 Adding unit tests for react. Adding end-to-end testing. CICD of the entire process.
 
