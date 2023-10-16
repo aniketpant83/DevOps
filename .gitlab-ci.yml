@@ -20,7 +20,7 @@ build_frontend:
   script:
     - cd frontend
     - echo "Building ${FRONTEND_IMAGE}"
-    - docker build -t ${FRONTEND_IMAGE}
+    - docker build -t ${FRONTEND_IMAGE} .
     - echo "${FRONTEND_IMAGE} has been built"
 
 build_backend:
@@ -28,7 +28,7 @@ build_backend:
   script:
     - cd backend
     - echo "Building ${BACKEND_IMAGE}"
-    - docker build -t ${BACKEND_IMAGE}
+    - docker build -t ${BACKEND_IMAGE} .
     - echo "${BACKEND_IMAGE} has been built"
 
 
