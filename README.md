@@ -25,35 +25,35 @@ There are two approaches you can take; locally or docker. I would suggest doing 
 
 ***Approach 1:*** Steps to Run the Full-Stack App Locally
 
--Backend: On one terminal, navigate to the folder named backend, and execute the command 'python3 app.py'  
--Frontend: On second terminal, navigate to the folder named frontend, and execute the command 'npm start'  
--Access frontend on localhost:3000.  
--Access backend on localhost:5000 or localhost:5000/tasks.  
--Use the app.  
+- Backend: On one terminal, navigate to the folder named backend, and execute the command 'python3 app.py'  
+- Frontend: On second terminal, navigate to the folder named frontend, and execute the command 'npm start'  
+- Access frontend on localhost:3000.  
+- Access backend on localhost:5000 or localhost:5000/tasks.  
+- Use the app.  
 
 ***Approach 2:*** Steps to Run the Full-Stack App on Containers:
 
 Download Docker: Go to https://hub.docker.com, and choose the one for your OS.
 
 From the dockerfiles in the repo, we will create two images and then two containers, one for Flask and one for React. To make these containers interact with each other we need to put them on the same network (since we are no longer working on the same local machine).  
--docker network create <network_name>
+- docker network create <network_name>
 
 Backend: We need to first build an image. Then run container from that image.  
--On one terminal, navigate to the folder named backend where the dockerfile for Flask is.  
--Execute the command 'docker build -t <image_name>'  
--Execute the command 'docker run --name <container_name> --network <network_name> -p 5000:5000 <image_name>  
+- On one terminal, navigate to the folder named backend where the dockerfile for Flask is.  
+- Execute the command 'docker build -t <image_name>'  
+- Execute the command 'docker run --name <container_name> --network <network_name> -p 5000:5000 <image_name>  
 Note: Port 5000 is where your backend is exposed. If you're new to this stuff, then you probably wanna look up small things like what 5000:5000 means.
 
 
 Frontend: We need to first build an image. Then run container from that image.  
--On one terminal, navigate to the folder named frontend where the dockerfile for React is.  
--Execute the command 'docker build -t <image_name>'  
--Execute the command 'docker run --name <container_name> --network <network_name> -p 3000:3000 <image_name>
+- On one terminal, navigate to the folder named frontend where the dockerfile for React is.  
+- Execute the command 'docker build -t <image_name>'  
+- Execute the command 'docker run --name <container_name> --network <network_name> -p 3000:3000 <image_name>
 
 Now that the app is running on the containers,
--Access frontend on localhost:3000.  
--Access backend on localhost:5000 or localhost:5000/tasks.  
--Use the app.
+- Access frontend on localhost:3000.  
+- Access backend on localhost:5000 or localhost:5000/tasks.  
+- Use the app.
 ___
 
 ***Unit Test:***
