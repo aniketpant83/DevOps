@@ -5,8 +5,8 @@ services:
 
 stages:
   - build
+  - depoy
   - test
-  - deploy
 
 variables:
   FRONTEND_CONTAINER: "my-react-container" 
@@ -36,6 +36,7 @@ test:
   stage: test
   script:
     - cd backend
+    - docker exec -it my_container /bin/bash
     - echo "Running tests..."
     - python -m pytest
     - echo "Tests have run"
