@@ -19,7 +19,7 @@ build_frontend:
   stage: build
   script:
     - cd frontend
-    - echo "Building frontend image"
+    - echo "Building ${FRONTEND_IMAGE}"
     - docker build -t ${FRONTEND_IMAGE}
     - echo "${FRONTEND_IMAGE} has been built"
 
@@ -27,7 +27,7 @@ build_backend:
   stage: build
   script:
     - cd backend
-    - echo "Building backend image"
+    - echo "Building ${BACKEND_IMAGE}"
     - docker build -t ${BACKEND_IMAGE}
     - echo "${BACKEND_IMAGE} has been built"
 
