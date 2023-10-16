@@ -5,7 +5,7 @@ services:
 
 stages:
   - build
-  - depoy
+  - deploy
   - test
 
 variables:
@@ -36,7 +36,8 @@ test:
   stage: test
   script:
     - cd backend
-    - docker exec -it my_container /bin/bash
+    - curl http://localhost:5000/
+    - docker exec -it ${BACKEND_CONTAINER} /bin/bash
     - echo "Running tests..."
     - python -m pytest
     - echo "Tests have run"
