@@ -64,9 +64,10 @@ create_network:
 deploy_backend:
   stage: deploy
   script:
+    - cd backend
+    - ls
     - tar xf ${BACKEND_IMAGE}.tar
     - docker load -i ${BACKEND_IMAGE}
-    - cd backend
     - echo "Deploying backend container"
     - docker run --name ${BACKEND_CONTAINER} --network ${COMMON_NETWORK} -p 5000:5000 ${BACKEND_IMAGE} || exit 1
     - echo "Backend is now running"
@@ -74,9 +75,10 @@ deploy_backend:
 deploy_frontend:
   stage: deploy
   script:
+    - cd frontend
+    - ls
     - tar xf ${FRONTEND_IMAGE}.tar
     - docker load -i ${FRONTEND_IMAGE}
-    - cd frontend
     - echo "Deploying frontend"
     - docker run --name ${FRONTEND_CONTAINER} --network ${COMMON_NETWORK} -p 3000:3000 ${FRONTEND_IMAGE} || exit 1
     - echo "Frontend is now running"
