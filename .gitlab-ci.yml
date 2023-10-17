@@ -42,6 +42,7 @@ deploy:
   stage: deploy
   script:
     - echo "Creating a common network"
+    - curl ifconfig.me
     - docker network create ${COMMON_NETWORK}
     - echo "Created ${COMMON_NETWORK}"
     - cd backend
