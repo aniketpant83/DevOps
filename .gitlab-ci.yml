@@ -39,20 +39,6 @@ build_backend:
     paths:
       - backend/${BACKEND_IMAGE}.tar
 
-test_backend:
-  stage: test
-  script:
-    - cd backend
-    - curl http://localhost:5000/
-    - docker exec -it ${BACKEND_CONTAINER} /bin/bash
-    - echo "Running tests..."
-    - python -m pytest
-    - echo "Tests have run"
-  artifacts:
-    when: always
-    paths:
-      - test-results/
-
 deploy:
   stage: deploy
   script:
@@ -71,3 +57,17 @@ deploy:
     - echo "Deploying frontend"
     - docker run --name ${FRONTEND_CONTAINER} --network ${COMMON_NETWORK} -p 3000:3000 ${FRONTEND_IMAGE} || exit 1
     - echo "Frontend is now running"
+
+test_backend:
+  stage: test
+  script:
+    - cd backend
+    - curl http://localhost:5000/
+    - docker exec -it ${BACKEND_CONTAINER} /bin/bash
+    - echo "Running tests..."
+    - python -m pytest
+    - echo "Tests have run"
+  artifacts:
+    when: always
+    paths:
+      - test-results/
