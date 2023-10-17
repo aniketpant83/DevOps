@@ -24,7 +24,7 @@ build_frontend:
     - echo "${FRONTEND_IMAGE} has been built"
   artifacts:
     paths:
-      - ${FRONTEND_IMAGE}.tar
+      - frontend/${FRONTEND_IMAGE}.tar
 
 build_backend:
   stage: build
@@ -35,7 +35,7 @@ build_backend:
     - echo "${BACKEND_IMAGE} has been built"
   artifacts:
     paths:
-      - ${BACKEND_IMAGE}.tar
+      - backend/${BACKEND_IMAGE}.tar
 
 test:
   stage: test
