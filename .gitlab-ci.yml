@@ -67,6 +67,7 @@ deploy_backend:
     - cd backend
     - ls
     - tar xf ${BACKEND_IMAGE}.tar
+    - ls
     - docker load -i ${BACKEND_IMAGE}
     - echo "Deploying backend container"
     - docker run --name ${BACKEND_CONTAINER} --network ${COMMON_NETWORK} -p 5000:5000 ${BACKEND_IMAGE} || exit 1
@@ -78,6 +79,7 @@ deploy_frontend:
     - cd frontend
     - ls
     - tar xf ${FRONTEND_IMAGE}.tar
+    - ls
     - docker load -i ${FRONTEND_IMAGE}
     - echo "Deploying frontend"
     - docker run --name ${FRONTEND_CONTAINER} --network ${COMMON_NETWORK} -p 3000:3000 ${FRONTEND_IMAGE} || exit 1
