@@ -6,7 +6,6 @@ services:
 stages:
   - build
   - deploy
-  - test
 
 variables:
   FRONTEND_CONTAINER: "my-react-container" 
@@ -50,12 +49,12 @@ deploy:
     - tar xf ${BACKEND_IMAGE}.tar  
     - docker load -i ${BACKEND_IMAGE}.tar
     - echo "Deploying backend container"
-    - docker run --name ${BACKEND_CONTAINER} --network ${COMMON_NETWORK} -p 5000:5000 ${BACKEND_IMAGE} || exit 1
+    - docker run --name ${BACKEND_CONTAINER} --network ${COMMON_NETWORK} -p 5000:5000 -d ${BACKEND_IMAGE} || exit 1
     - echo "Backend is now running"
     - cd ../frontend
     - docker load -i ${FRONTEND_IMAGE}.tar
     - echo "Deploying frontend"
-    - docker run --name ${FRONTEND_CONTAINER} --network ${COMMON_NETWORK} -p 3000:3000 ${FRONTEND_IMAGE} || exit 1
+    - docker run --name ${FRONTEND_CONTAINER} --network ${COMMON_NETWORK} -p 3000:3000 -d ${FRONTEND_IMAGE} || exit 1
     - echo "Frontend is now running"
 
 test_backend:
