@@ -22,6 +22,7 @@ build_frontend:
     - echo "Building ${FRONTEND_IMAGE}"
     - docker build -t ${FRONTEND_IMAGE} .
     - echo "${FRONTEND_IMAGE} has been built"
+    - docker save -o ${FRONTEND_IMAGE}.tar ${FRONTEND_IMAGE}
   artifacts:
     paths:
       - frontend/${FRONTEND_IMAGE}.tar
@@ -33,6 +34,7 @@ build_backend:
     - echo "Building ${BACKEND_IMAGE}"
     - docker build -t ${BACKEND_IMAGE} .
     - echo "${BACKEND_IMAGE} has been built"
+    - docker save -o ${BACKEND_IMAGE}.tar ${BACKEND_IMAGE}
   artifacts:
     paths:
       - backend/${BACKEND_IMAGE}.tar
@@ -62,8 +64,8 @@ create_network:
 deploy_backend:
   stage: deploy
   script:
-    - tar xf ${BACKEND_CONTAINER}.tar
-    - docker load -i ${BACKEND_CONTAINER}
+    - tar xf ${BACKEND_IMAGE}.tar
+    - docker load -i ${BACKEND_IMAGE}
     - cd backend
     - echo "Deploying backend container"
     - docker run --name ${BACKEND_CONTAINER} --network ${COMMON_NETWORK} -p 5000:5000 ${BACKEND_IMAGE} || exit 1
@@ -72,8 +74,8 @@ deploy_backend:
 deploy_frontend:
   stage: deploy
   script:
-    - tar xf ${FRONTEND_CONTAINER}.tar
-    - docker load -i ${FRONTEND_CONTAINER}
+    - tar xf ${FRONTEND_IMAGE}.tar
+    - docker load -i ${FRONTEND_IMAGE}
     - cd frontend
     - echo "Deploying frontend"
     - docker run --name ${FRONTEND_CONTAINER} --network ${COMMON_NETWORK} -p 3000:3000 ${FRONTEND_IMAGE} || exit 1
