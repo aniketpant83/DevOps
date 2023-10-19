@@ -43,12 +43,9 @@ deploy:
   script:
     - echo "Creating a common network"
     - curl ifconfig.me
-    - ls
     - docker network create ${COMMON_NETWORK}
     - echo "Created ${COMMON_NETWORK}"
     - cd backend
-    - ls
-    #- tar xf ${BACKEND_IMAGE}.tar  
     - docker load -i ${BACKEND_IMAGE}.tar
     - echo "Deploying backend container"
     - docker run --name ${BACKEND_CONTAINER} --network ${COMMON_NETWORK} -p 5000:5000 -d ${BACKEND_IMAGE} || exit 1
