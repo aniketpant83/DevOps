@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: 717264252202.dkr.ecr.us-east-1.amazonaws.com/my-flask-ecr-image:v2.0
+          ports:
+            - containerPort: 5000

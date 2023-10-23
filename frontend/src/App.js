@@ -41,7 +41,7 @@ const App = () => {
 
       setTasks(updatedTasks);
 
-      const response = await fetch(`http://localhost:5000/tasks/${taskId}`, {
+      const response = await fetch(`http://a322806b5a45248f0a3439d36f70c390-8dfe84e5772f51e0.elb.us-east-1.amazonaws.com/tasks/${taskId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +65,7 @@ const App = () => {
 
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(`http://localhost:5000/tasks/${taskId}`, {
+      const response = await fetch(`http://a322806b5a45248f0a3439d36f70c390-8dfe84e5772f51e0.elb.us-east-1.amazonaws.com/tasks/${taskId}`, {
         method: 'DELETE',
       });
   
@@ -87,7 +87,7 @@ const App = () => {
     try {
       const payload = { name: newTaskName };
 
-      const response = await fetch("http://localhost:5000/tasks", {
+      const response = await fetch("http://a322806b5a45248f0a3439d36f70c390-8dfe84e5772f51e0.elb.us-east-1.amazonaws.com/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +111,7 @@ const App = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch("http://localhost:5000/tasks");
+      const response = await fetch("http://a322806b5a45248f0a3439d36f70c390-8dfe84e5772f51e0.elb.us-east-1.amazonaws.com/tasks");
       if (response.ok) {
         const data = await response.json();
         setTasks(data);
