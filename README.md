@@ -93,6 +93,12 @@ Deploy job: Creates a common network for both containers to connec to. Moves int
 
 ___
 
+**Terraform**
+
+Infrastructre as code set-up for AWS resources. Working on more, but the ones currently set up:
+- ECR
+___
+
 **WIP: Unit Tests**
 Written unit tests for Flask but working on the rest. Need to integrate the same into CICD
 
@@ -120,7 +126,12 @@ The basic layout + syntax of React. Learnt how to use developer tools/web inspec
 
 ***Kubernetes***
 
-- react can no longer connect to flask over localhost:5000 but needs to use lb-dns. 
+- react can no longer connect to flask over localhost:5000 but needs to use lb-dns (hence we deployed a load balacner type service). 
+- add http:// now to the above or else it uses relative pathing and will end up combining two domain names of react+flask.
+- dockers build can cache to build subsequrent build faster. This can lead to code updates not reflecting in the new builds.
+- start using image:tags to keep track of which version you are on.
+- keep an eye on which instances are deployed by the node group. My t3.mediums started costing me.
+- Don't need more than 1 replica for this project so make it 1 in the deployment manifest.
 
 ***Unit Tests***
 
