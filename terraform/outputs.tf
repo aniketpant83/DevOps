@@ -1,3 +1,5 @@
+# All outputs are self explanatory
+
 output "tf_tm_flask_ecr_image_url" {
   description = "URL of the flask image repository"
   value       = aws_ecr_repository.tf_tm_flask_ecr_image.repository_url
