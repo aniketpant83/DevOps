@@ -5,7 +5,7 @@
 - Write a web application in React/Vue/Angular. (Done)
 - Write a REST API in Flask/Django/GoGin/whatever hooked to a database like Postgres. (Done)
 - Make your web application create and consume content from the API, locally at first. (Done)
-- Write Dockerfiles for both projects and publish to a container registry like ghcr.io. (Partially done, not published)
+- Write Dockerfiles for both projects and publish to a container registry like ghcr.io. (Done, used ECR instead)
 - Deploy both containers with the solution of your choice, be it on a single node Docker runtime, or even a Kubernetes cluster. (Done using two docker containers)
 - Setup DNS records such as your-app.io and api.your-app.io that point to both production workloads, and have Let'sEncrypt give you TLS certificate to access both project over the internet via HTTPS. (To Do)
 - Make your production front-end communicate with your production API. Figure out what CORS is and why it may be a problem in that setup. (To Do)
@@ -95,8 +95,20 @@ ___
 
 **Terraform**
 
-Infrastructre as code set-up for AWS resources. Working on more, but the ones currently set up:
-- ECR
+Infrastructre as code set-up for AWS resources. It is all documented in the terraform code, but you can find it here too.
+- 2 ECR repos to store docker images and for EKS to pull images from.
+- A fairly complex EKS set-up, following the official AWS guide.
+    - Create CloudFormation stack provided by AWS for EKS (contents are in a file in the terraform directory)
+    - Create IAM cluster role
+    - Create policy attachment to cluster role
+    - Cluster creation using outputs from network stack created by cloudformation above
+    - Create IAM node role
+    - Attach 3 policies to IAM node role
+    - Create note group
+- variables.tf for storing variables which can be accessed from other tf files.
+- outputs.tf to store outputs created during resource creation.
+- backend.tf has the tfstate file which has the current configurations, launched by terraform, on AWS stored. This allows us to have version controlled configurations.
+
 ___
 
 **WIP: Unit Tests**
@@ -132,6 +144,14 @@ The basic layout + syntax of React. Learnt how to use developer tools/web inspec
 - start using image:tags to keep track of which version you are on.
 - keep an eye on which instances are deployed by the node group. My t3.mediums started costing me.
 - Don't need more than 1 replica for this project so make it 1 in the deployment manifest.
+
+***AWS & Terraform***
+
+- AWS: Just deleting cluster and ec2 instances wont stop you from being charged. Even supporting resources created by the stack will charge. Hence, delete cluster, roles & policies, and then also cloudformation stack. If you use terraform for the above, then terraform destroy should take care of everything. One of the biggest advantages of using Terraform.
+- AWS: Keep visitng the bill and cost explorer page on AWS to keep a track of expenses.
+- Terraform: use depends-on to reduce errors when applying.
+- Terraform: Don't forget to destroy after testing apply.
+- Terraform: Set instance type to t3.micro to prevent node group from deploying other more expensive instances.
 
 ***Unit Tests***
 
