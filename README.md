@@ -147,8 +147,7 @@ The basic layout + syntax of React. Learnt how to use developer tools/web inspec
 
 ***AWS & Terraform***
 
-- AWS: Just deleting cluster and ec2 instances wont stop you from being charged. Even supporting resources created by the stack will charge. Hence, delete cluster, roles & policies, and then also cloudformation stack. If you use terraform for the above, then terraform destroy should take care of everything. One of the biggest advantages of using Terraform.
-- AWS: Keep visitng the bill and cost explorer page on AWS to keep a track of expenses.
+- AWS: While running my cluster, as expected, I had incurred a small expnse of $3. When I checked my billings page, I could see it was from EC2 and the EKS cluster. I went ahead and deleted the two after I was done deploying my app succesfully. However, when I logged in after 10 days, I saw that I was charged 2$ everyday and the reports page was still saying EC2, but I had no instances running. I then realized that it must be the Elastic IPs, security groups, and other networking resources which were created by the CloudFormation template. Hence, delete cluster, roles & policies, and then also cloudformation stack. If you use terraform for the above, then terraform destroy should take care of everything. One of the biggest advantages of using Terraform. Keep visitng the bill and cost explorer page on AWS to keep a track of expenses.
 - Terraform: use depends-on to reduce errors when applying.
 - Terraform: Don't forget to destroy after testing apply.
 - Terraform: Set instance type to t3.micro to prevent node group from deploying other more expensive instances.
