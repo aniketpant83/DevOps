@@ -62,11 +62,11 @@ Now that the app is running on the containers,
 - Access backend on localhost:5000 or localhost:5000/tasks.  
 - Use the app.
 
-***Approach 3 (AWS Elastic Kubernetes Service):*** Steps to run the Full-Stack app on Kubernetes:
+***Approach 3 (AWS Elastic Kubernetes Service):*** Steps to run the app on Kubernetes:
 
 This is slightly complex when it comes to the set-up. It starts to make sense as you understand the architecture of what is happening. The point of using Kubernetes instead of just plain old dockers is that kubernetes helps with container orchestration: scaling, self healing, traffic load balancing etc. It is obviously not required for this project as it is a simple web app which I don't expect anyone to use but myself for learning purposes, but it is for these learning purposes that we implement kubernetes and figure out how the URLs change, how the builds change, and how to prepare your cluster to host your app. I also got a better understanding of dockers and AWS from learning the basics of kuberenetes. You can obviously use Chatgpt for the above or the below steps to learn better but I will give you my steps which are tailored to this app and you can execute faster (but at the cost of learning lesser). Learn among all the manifests, why we use deployments and services in the below steps.
 
-- Set up an AWS EKS cluster using the official documentation (follow the guide thoroughly) (this will include prereq like aws cli etc)
+- Set up an AWS EKS cluster using the official documentation (https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html, follow the guide thoroughly) (this will include prereq like aws cli etc)
 - Create Service manifest - Type: Load Balancer for frontend and backend (or just use the ones I have written already). They will create load balancers which allow the traffic to be load balanced between the pod replicas. The purpose of this, or at least my understanding, is to give a common endpoint for the react app to be able to connect to the flask app. Since the containers are not in the same pods, they don't share a common namespace network and hence cannot reach each other through localhost. The nlb allows this common endpoint.
     - Deploy manifest: kubectl apply -f eks/frontend-service.yaml & kubecyl apply -f eks/backend-service.yaml
 - Find out the DNS name for the backend loadbalancer, and replace all the localhost:5000 calls in the react code to the that DNS. For eg: loaclhost:5000/tasks becomes http://<lb-dns>/tasks
