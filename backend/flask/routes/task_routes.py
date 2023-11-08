@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_login import LoginManager, login_user, login_required, logout_user, UserMixin, current_user
 from . import task_routes
 from models import Task
 from flask import Blueprint
@@ -8,6 +9,7 @@ from models import db
 task_routes = Blueprint('task_routes', __name__)
 
 @task_routes.route('/')
+@login_required
 def home():
     return jsonify({'message': 'Welcome to the Task Management API'})
 

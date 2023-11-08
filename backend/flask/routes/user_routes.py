@@ -4,11 +4,19 @@ from . import user_routes
 from models import User
 from flask_bcrypt import Bcrypt
 from models import db
+from flask_jwt_extended import create_access_token
 from flask_login import LoginManager, login_user, login_required, logout_user, UserMixin, current_user
-
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import Blueprint
 
 user_routes = Blueprint('user_routes', __name__)
+
+@user_routes.route('/validate_token', methods=['GET'])
+@jwt_required()
+def validate_token():
+    current_user = get_jwt_identity()
+    print("the Current user is:",current_user)
+    return jsonify(valid=True, user=current_user), 200
 
 @user_routes.route('/users', methods=['GET'])
 def get_users():
@@ -34,8 +42,13 @@ def register():
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
-
-    return jsonify({'message': 'User registered successfully'}), 201
+    access_token = create_access_token(identity=username)
+    
+    return jsonify({
+    'message': 'User registered successfully',
+    'user': username,
+    'access_token': access_token
+}), 201
 
 
 @user_routes.route('/login', methods=['POST'])
@@ -49,7 +62,12 @@ def login():
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
         login_user(user)
-        return jsonify({'message': 'User logged in successfully'}), 200
+        access_token = create_access_token(identity=username)
+        return jsonify({
+    'message': 'User logged in successfully',
+    'user': username,
+    'token': access_token
+}), 200
 
     return jsonify({'error': 'Invalid username or password'}), 401
 

@@ -5,6 +5,7 @@ from routes import user_routes, task_routes
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 CORS(app)
@@ -16,6 +17,7 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+jwt = JWTManager(app)
 
 # Register blueprints
 app.register_blueprint(user_routes.user_routes)

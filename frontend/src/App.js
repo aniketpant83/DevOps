@@ -10,6 +10,7 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [newTaskName, setNewTaskName] = useState("");
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch tasks when the component mounts
@@ -18,25 +19,37 @@ const App = () => {
   
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log("token is:",token);
     if (token) {
-      // Optionally validate token with backend here and fetch user data if needed
       fetch('http://localhost:5000/validate_token', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
-      }).then(response => response.json())
-        .then(data => {
-          if (data.valid) {
-            setUser(data.user); // Set the user data here after validating the token
-          }
-        }).catch(error => {
-          console.error('Error validating token:', error);
-        });
+      }).then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Token validation failed');
+        }
+      }).then(data => {
+        if (data.valid) {
+          setUser(data.user); // Set the user data here after validating the token
+        } else {
+          // Handle the case where the token is not valid
+          console.error('Token is not valid');
+        }
+      }).catch(error => {
+        console.error('Error validating token:', error);
+        // Possibly clear the token if it's not valid
+        localStorage.removeItem('token');
+        setUser(null); // Reset user state if the token is invalid
+      });
     }
   }, []);
   
+  
 
-  const navigate = useNavigate();
+ 
   const handleRegister = async (username, email, password) => {
     
     try {
@@ -50,11 +63,10 @@ const App = () => {
   
       const data = await response.json();
       // Assuming the API returns the user data on successful registration:
-      setUser(data);
-      // If you have a token returned from your backend, you might want to store it:
-      // localStorage.setItem('token', data.token);
+      setUser(data.user);
 
       if (response.ok) {
+        localStorage.setItem('token', data.token);
         console.log('Response from backend:', data);
         console.log('Registration successfully');
       } else {
@@ -81,17 +93,16 @@ const App = () => {
       });
       
       const data = await response.json();
-      setUser(data);
+      setUser(data.user);
 
       if (response.ok) {
         localStorage.setItem('token', data.token);
+        console.log('Loggedin, token is: ', data.token);
         console.log('Login successfully', data);
       } else {
         console.error('Login failed');
         console.error('Error Details:', data);
   
-      
-      //localStorage.setItem('token', data.token); // Save the token to localStorage
       navigate('/');
       }
     } catch (error) {
@@ -99,6 +110,13 @@ const App = () => {
 
     }
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove the token from localStorage
+    setUser(null); // Update the state to reflect that the user is logged out
+  };
+
+  // =============================== User Login & Register ========================================================
 
 
   const nextStatus = (currentStatus) => {
