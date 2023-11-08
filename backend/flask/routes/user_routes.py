@@ -78,7 +78,6 @@ def logout():
     logout_user()
     return jsonify({'message': 'User logged out successfully'}), 200
 
-
 @user_routes.route('/protected')
 @login_required
 def protected_route():

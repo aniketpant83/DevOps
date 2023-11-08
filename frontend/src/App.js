@@ -111,10 +111,36 @@ const App = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove the token from localStorage
-    setUser(null); // Update the state to reflect that the user is logged out
+  const handleLogout = async () => {
+    // Send a POST request to the server to handle server-side logout if necessary
+    try {
+      const response = await fetch('http://localhost:5000/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        console.log(data.message);
+      } else {
+        console.error('Logout failed:', data);
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  
+    // Remove the token from localStorage regardless of server response
+    localStorage.removeItem('token');
+    
+    // Update the user state to null
+    setUser(null);
+  
+    // Redirect to login page or home page
+    navigate('/'); // or wherever you want to redirect after logout
   };
+  
 
   // =============================== User Login & Register ========================================================
 
@@ -245,6 +271,7 @@ const App = () => {
         onAddTask={handleAddTask}
         newTaskName={newTaskName}
         setNewTaskName={setNewTaskName}
+        onLogout={handleLogout}
       />
       <TaskList tasks={tasks} onTaskClick={handleTaskClick} />
       </>

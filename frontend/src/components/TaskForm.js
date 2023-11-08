@@ -1,7 +1,7 @@
 // TaskForm.js
 import React, { useState } from "react";
 
-const TaskForm = ({ onAddTask }) => {
+const TaskForm = ({ onAddTask, onLogout }) => {
   const [taskName, setTaskName] = useState("");
 
   const handleAddTask = () => {
@@ -22,6 +22,7 @@ const TaskForm = ({ onAddTask }) => {
         onChange={(e) => setTaskName(e.target.value)}
       />
       <button onClick={handleAddTask}>Add Task</button>
+      <button onClick={onLogout}>Logout</button>
     </div>
   );
 };
