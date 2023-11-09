@@ -11,6 +11,7 @@ const App = () => {
   const [newTaskName, setNewTaskName] = useState("");
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const flask_url = 'http://localhost:5000/'
 
   useEffect(() => {
     // Fetch tasks when the component mounts
@@ -21,7 +22,7 @@ const App = () => {
     const token = localStorage.getItem('token');
     console.log("token is:",token);
     if (token) {
-      fetch('http://localhost:5000/validate_token', {
+      fetch(flask_url + 'validate_token', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -53,7 +54,7 @@ const App = () => {
   const handleRegister = async (username, email, password) => {
     
     try {
-      const response = await fetch('http://localhost:5000/register', {
+      const response = await fetch(flask_url + 'register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +85,7 @@ const App = () => {
   const handleLogin = async (username, email, password) => {
 
     try {
-      const response = await fetch('http://localhost:5000/login', {
+      const response = await fetch(flask_url + 'login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +115,7 @@ const App = () => {
   const handleLogout = async () => {
     // Send a POST request to the server to handle server-side logout if necessary
     try {
-      const response = await fetch('http://localhost:5000/logout', {
+      const response = await fetch(flask_url + 'logout', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -174,7 +175,7 @@ const App = () => {
 
       setTasks(updatedTasks);
 
-      const response = await fetch(`http://localhost:5000/tasks/${taskId}`, {
+      const response = await fetch(flask_url + `tasks/${taskId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -198,7 +199,7 @@ const App = () => {
 
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(`http://localhost:5000/tasks/${taskId}`, {
+      const response = await fetch(flask_url + `tasks/${taskId}`, {
         method: 'DELETE',
       });
   
@@ -220,7 +221,7 @@ const App = () => {
     try {
       const payload = { name: newTaskName };
 
-      const response = await fetch("http://localhost:5000/tasks", {
+      const response = await fetch(flask_url + "tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -244,7 +245,7 @@ const App = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch("http://localhost:5000/tasks");
+      const response = await fetch(flask_url + "tasks");
       if (response.ok) {
         const data = await response.json();
         setTasks(data);

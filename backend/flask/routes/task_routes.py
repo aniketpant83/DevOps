@@ -9,7 +9,6 @@ from models import db
 task_routes = Blueprint('task_routes', __name__)
 
 @task_routes.route('/')
-@login_required
 def home():
     return jsonify({'message': 'Welcome to the Task Management API'})
 

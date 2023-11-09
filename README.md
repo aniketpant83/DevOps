@@ -25,7 +25,12 @@ ___
 - Note 5: For Approach 1 and 2, make the react code fetch from flask using localhost:5000 (the code may already be set as this or you need to in the fetch functions). For Approach 3, change it to load balancer DNS.
 
 
-**How the app works:** Add tasks, refresh the page to see the added tasks (marked as Issue 1 under issues heading). You can click on the tasks to move them around. When a task reaches 'Done' state and is clicked again, it deletes it in the backend but on the frontend, it pushes it in a cylical process back to 'To Do'. Refresh the page to see the task as deleted (marked as Issue 2, linked to Issue 1 I think).
+**How the app works:** 
+- There is page for login + register, and another for adding tasks (homepage)
+- Add tasks, refresh the page to see the added tasks (marked as Issue 1 under issues heading). 
+- You can click on the tasks to move them around.
+- When a task reaches 'Done' state and is clicked again, it deletes it in the backend but on the frontend, it pushes it in a cylical process back to 'To Do' (bug). More below.
+- You have to refresh the page to see the task as deleted (marked as Issue 2, linked to Issue 1 I think).
 
 ## Running The App
 There are several approaches you can take. I would suggest doing it using each approach one after the other to get a good understanding of the project. 
@@ -59,7 +64,7 @@ Frontend: We need to first build an image. Then run container from that image.
 
 Now that the app is running on the containers,
 - Access frontend on localhost:3000.  
-- Access backend on localhost:5000 or localhost:5000/tasks.  
+- Access backend on localhost:5000/ or localhost:5000/tasks or localhost:5000/users.  
 - Use the app.
 
 ***Approach 3 (AWS Elastic Kubernetes Service):*** Steps to run the app on Kubernetes:
@@ -81,6 +86,20 @@ This is slightly complex when it comes to the set-up. It starts to make sense as
 - Ensure everything is running: Do: kubectl get pods and kubectl get svc to make sure everything is running right. Make sure you have given the load balancer a few minutes to set up and the ECR repos are having your images in them.
 - You should be able to visit frontend and backend on the loadbalancers' DNS.
 ___
+
+***React and Flask***
+
+- React: Wrote this with ChatGPT as coding buddy. Two pages on this web app: SignIn/Register and Home Page to manage tasks.
+    - Have used fetch to interact with flask instead of a library like axios.
+    - Used JWT to manage session, upon logging in. Once logged out, session terminated. Till this was done, I was not able to stay logged in after refreshing.
+    - Code isn't really documented, that is still pending. Feel free to do it and create a pull request.
+    - App.js seems lengthy but it is a lot of logging and error handling and less logic, easy to understand. 
+    - Created a flask_url variable to store which url to access flask app on. This will change depending on what the server is running on.
+- Flask: Wrote this with ChatGPT too as coding buddy. Initially it was a simple one file code but later, to follow best practice, I split it into multiple packages.
+    - Using REST API with user_routes and task_routes blueprinted into the main app.py.
+    - Used CORS to allow access from React.
+    - To refer to what the flask file initially looked like , back when there was no login page, you can open file app-archive. py in the backend directory.
+    - You can use the above point to understand flask better and then dive into what it looks like with the current structure.
 
 **CICD Using Gitlab-CI**
 
@@ -121,12 +140,16 @@ ___
 I went into this project with very little knowledge on each stage. That was the whole point of doing the project, so I could learn! To an experienced engineer, this should not take much time but it took me a lot of time to overcome some fundamental issues. I would suggest you skip reading this part as the best way to learn is to bump into these issues yourself and grow from them. Come and refer to these as the last resort, when even the rest of the internet fails you! Below are my learnings.
 
 ***Frontend React:*** 
-The basic layout + syntax of React. Learnt how to use developer tools/web inspector to read http requests and responses. Learnt the importance of logging at different steps.
+- The basic layout + syntax of React. Learnt how to use developer tools/web inspector to read http requests and responses. Learnt the importance of logging at different steps.
+- How to use token storage for staying on a page post refresh and useNavigate to move around.
 
 ***Flask:*** 
 
 - The basic layout and syntax for Flask. Also, very important to add try and except blocks as they make error handling much easier and also give you a sense of what is going wrong.
 - Learnt the need for CORS, thereby allowing frontend and backend to interact with each other. Only with flask, did my data on frontend persist.
+- Learnt how to make the code work when the single flask file is split into multiple files and packages.
+- Handling and returning JWT and data in general. I realized I was just returning message in json response. Later changed it to data being returned.
+- How to route things for REST API.
 
 ***Docker*** 
 
