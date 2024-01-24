@@ -1,26 +1,21 @@
 # Task Management Web Application
 
-## Attempting the below project, not in a strict order:
-
-- Write a web application in React/Vue/Angular. (Done)
-- Write a REST API in Flask/Django/GoGin/whatever hooked to a database like Postgres. (Done)
-- Make your web application create and consume content from the API, locally at first. (Done)
-- Write Dockerfiles for both projects and publish to a container registry like ghcr.io. (Done, used ECR instead)
-- Deploy both containers with the solution of your choice, be it on a single node Docker runtime, or even a Kubernetes cluster. (Done using two docker containers)
-- Setup DNS records such as your-app.io and api.your-app.io that point to both production workloads, and have Let'sEncrypt give you TLS certificate to access both project over the internet via HTTPS. (To Do)
-- Make your production front-end communicate with your production API. Figure out what CORS is and why it may be a problem in that setup. (To Do)
-- Document everything in each projects README.md file. (In Progress)
-- Write unit tests for both projects and end-to-end tests that make your front-end interacting with your API. (Partially Done)
-- Write CI pipelines that run tests automatically on every push. (To Do)
-- Write build pipelines that publish your containers automatically on each git tag of your main branch. Make sure to follow semantic versionning. (To Do)
-- Find a solution that automates promotion of new artifacts in production when conditions are met. (To Do)
+- Used React for frontend.
+- Wrote backend in Flask hooked to a SQLAlchemy database.
+- Enabled commnunication between the two using REST APIs, CORS, and integrated JWT for authentication.
+- Wrote dockerfiles, built images, and pushed to AWS ECR.
+- Method 1: Deployed both containers individually using docker run | Method 2: Used AWS Elastic Kubernetes Service. -> Did both methods.
+- Incorporated Terraform to set up Infrastructure as Code.
+- Documented detailed approach in README.md file.
+- Wrote GitLab CI/CD pipeline in an intermediary step to deploy the app using docker run | WIP: Deploying it on EKS + Terraform
+  
 ___
 
 **Notes (Read before you start):**
 - Note 0: I have written this documentation as and when I was working on the project so the way of writing and what I want to cover will keep changing till I do a revamp of the entire thing. So bear with the inconsistent guiding methods.
-- Note 1: I am a beginner myself, but if you're even greener than me and not getting any of the terms, I URGE you to open chatGPT and understand these terms instead of glossing over it. 
-- Note 2: You can refer to my learnings towards the end of this readme to help you out of tough spots which I found myself in. There's a good chance you will come across those issues too.
-- Note 3: Make sure you to understand what can start costing in your AWS using billing alerts.
+- Note 1: I am a beginner myself, but if you're even greener than me/not getting any of the terms, I URGE you to open chatGPT and understand these terms instead of glossing over it. 
+- Note 2: You can refer to my learnings towards the end of this readme to help you out of tough spots which I found myself in, there's a good chance you will come across those issues too.
+- Note 3: Make sure you to understand what can start costing in your AWS using billing alerts. (EC2 instances + Cluster + Elastic IPs etc)
 - Note 4: Dockers on your local can start consuming space if not cleaned regularly. 
 - Note 5: For Approach 1 and 2, make the react code fetch from flask using localhost:5000 (the code may already be set as this or you need to in the fetch functions). For Approach 3, change it to load balancer DNS.
 
@@ -86,6 +81,7 @@ This is slightly complex when it comes to the set-up. It starts to make sense as
 - Ensure everything is running: Do: kubectl get pods and kubectl get svc to make sure everything is running right. Make sure you have given the load balancer a few minutes to set up and the ECR repos are having your images in them.
 - You should be able to visit frontend and backend on the loadbalancers' DNS.
 ___
+**Tech Stack**
 
 ***React and Flask***
 
@@ -101,7 +97,7 @@ ___
     - To refer to what the flask file initially looked like , back when there was no login page, you can open file app-archive. py in the backend directory.
     - You can use the above point to understand flask better and then dive into what it looks like with the current structure.
 
-**CICD Using Gitlab-CI**
+***CICD Using Gitlab-CI***
 
 Note: A gitlab-ci file runs in stages. Each stage must have one or more jobs under it.
 Two stages: Build (Two jobs: build_backend, build_frontend) and Deploy (deploys network and buils containers). Third stage Test yet to be included. 
@@ -112,7 +108,7 @@ Deploy job: Creates a common network for both containers to connec to. Moves int
 
 ___
 
-**Terraform**
+***Terraform***
 
 Infrastructre as code set-up for AWS resources. It is all documented in the terraform code, but you can find it here too.
 - 2 ECR repos to store docker images and for EKS to pull images from.
@@ -130,11 +126,6 @@ Infrastructre as code set-up for AWS resources. It is all documented in the terr
 
 ___
 
-**WIP: Unit Tests**
-Written unit tests for Flask but working on the rest. Need to integrate the same into CICD
-
-___
-
 **Major Learnings Per Stage**
 
 I went into this project with very little knowledge on each stage. That was the whole point of doing the project, so I could learn! To an experienced engineer, this should not take much time but it took me a lot of time to overcome some fundamental issues. I would suggest you skip reading this part as the best way to learn is to bump into these issues yourself and grow from them. Come and refer to these as the last resort, when even the rest of the internet fails you! Below are my learnings.
@@ -143,7 +134,7 @@ I went into this project with very little knowledge on each stage. That was the 
 - The basic layout + syntax of React. Learnt how to use developer tools/web inspector to read http requests and responses. Learnt the importance of logging at different steps.
 - How to use token storage for staying on a page post refresh and useNavigate to move around.
 
-***Flask:*** 
+***Backend Flask:*** 
 
 - The basic layout and syntax for Flask. Also, very important to add try and except blocks as they make error handling much easier and also give you a sense of what is going wrong.
 - Learnt the need for CORS, thereby allowing frontend and backend to interact with each other. Only with flask, did my data on frontend persist.
